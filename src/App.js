@@ -1,23 +1,45 @@
-import logo from './logo.svg';
+import {useState} from 'react';
 import './App.css';
 
+const list = [
+  'burger',
+  'spanakorizo',
+  'chicken',
+  'pastitio',
+  'mpougatsa'
+];
+
+function List({results}) {
+
+  return (
+    <ul>
+      {results
+        .map(item => {
+          return (
+          <li key={item}>{item}</li> 
+          )
+        })
+      }
+    </ul>
+  );
+}
+
+
 function App() {
+  const [searchValue, setSearchValue] = useState('');
+
+  const onInputChange = event => {
+    setSearchValue(event.target.value)
+  }
+
+
+  const results = list.filter(food => food.includes(searchValue))
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input onChange={onInputChange}/>
+      <List results={results}/>
     </div>
   );
 }
