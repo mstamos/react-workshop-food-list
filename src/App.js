@@ -1,5 +1,7 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import './App.css';
+
+import List from './List';
 
 const list = [
   'burger',
@@ -9,37 +11,30 @@ const list = [
   'mpougatsa'
 ];
 
-function List({results}) {
-
-  return (
-    <ul>
-      {results
-        .map(item => {
-          return (
-          <li key={item}>{item}</li> 
-          )
-        })
-      }
-    </ul>
-  );
-}
-
+const getFoods = () =>  Promise.resolve(list);
 
 function App() {
   const [searchValue, setSearchValue] = useState('');
+  const [foods, setFoods] = useState([]);
+
+  useEffect(() => {
+    getFoods().then(data => {
+      setFoods(data)
+    })
+  }, [])
+
+  useEffect(() => {
+    setFoods(foods.filter(food => food.includes(searchValue)))
+  }, [searchValue])
 
   const onInputChange = event => {
     setSearchValue(event.target.value)
   }
 
-
-  const results = list.filter(food => food.includes(searchValue))
-
-
   return (
     <div className="App">
       <input onChange={onInputChange}/>
-      <List results={results}/>
+      <List items={foods}/>
     </div>
   );
 }
